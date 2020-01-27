@@ -257,16 +257,79 @@ function orderAlphabetically(arr) {
 }
 
 // Iteration 4: All rates average - Get the average of all rates with 2 decimals
-// function ratesAverage(arrOfMovies) {
-//     if(arrOfMovies.length === 0) return averageRate;
-//     let averageRate = 0;
-//     let newArr = arrOfMovies.filter(obj => Object.keys(obj).includes('rate'))
-//     newArr.forEach(movie => averageRate += movie.rate);
-//     return Math.round(100*averageRate/arrOfMovies.length)/100;
-// }
+
+function ratesAverage(arr) {
+  // if(arrOfMovies.length === 0) return averageRate;
+  // let averageRate = 0;
+  // let newArr = arrOfMovies.filter(obj => Object.keys(obj).includes('rate'))
+  // newArr.forEach(movie => averageRate += movie.rate);
+  // return Math.round(100*averageRate/arrOfMovies.length)/100;
+
+  let sumOfRating = arr.reduce((sum, curr) => {
+    let ratingAsFloat = Number(curr.rate);
+    return sum + ratingAsFloat;
+  }, 0);
+
+  let averageRating = sumOfRating/arr.length;
+  let avgRounded = Number(averageRating.toFixed(2));
+
+  return avgRounded || 0;
+
+  // short version
+  // return Number((arr.reduce((sum, curr) => sum + Number(curr.rate), 0)/arr.length).toFixed(2)) || 0;
+}
 
 // Iteration 5: Drama movies - Get the average of Drama Movies
+function dramaMoviesRate(arr) {
+  // if Drama is found in the genre array then return elements into array
+  let dramaOnly = arr.filter(curr => {
+    return curr.genre.indexOf("Drama") >= 0;
+  });
+
+  let dramaAvgRating = ratesAverage(dramaOnly);
+
+  return dramaAvgRating;
+
+  // short version
+  // return ratesAverageFancy(arr.filter(curr => curr.genre.indexOf("Drama") >= 0)) || 0;
+}
 
 // Iteration 6: Time Format - Turn duration of the movies from hours to minutes
+function turnHoursToMinutes(arr) {
+  let duration2 = arr.map((curr) => {
+    return curr.duration;
+  }).map((curr) => {
+    if(curr.length === 0)
+    return '0';
+    else if(curr.includes("h") && curr.includes("min")) {
+      return parseInt(curr.split("h").join("").split("min").join("").split(" ")[0])*60 + parseInt(curr.split("h").join("").split("min").join("").split(" ")[1]);
+    }
+    else if(curr.includes("h")) {
+      return parseInt(curr.split("h").join(""))*60;
+    }
+    else if(curr.includes("min")) {
+      return parseInt(curr.split("h").join(""));
+    }
+    else
+    return curr;
+  })
+
+  let count = 0;
+  let addMinutes = arr.map((curr) => {
+     curr.duration = duration2[count];
+     count++
+    return curr;
+  })
+
+  return addMinutes;
+
+  // change each duration to string before splitting
+}
 
 // BONUS Iteration: Best yearly rate average - Best yearly rate average
+function bestYearAvg(arr) {
+  if(arr.length == 0) return null;
+  let sortedByYear = orderByYear(arr);
+
+  let currYear = sortedByYear[0].year;
+}
